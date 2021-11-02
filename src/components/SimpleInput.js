@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 
 const SimpleInput = (props) => {
+  // const nameInput = useRef()
   const [enteredName, setEnteredName] = useState('');
 
   const nameInputChanceHandler = event => {
@@ -11,6 +12,8 @@ const SimpleInput = (props) => {
     event.preventDefault();
     console.log(enteredName);
     setEnteredName('');
+    // const enteredValue = nameInput.current.value;
+    // console.log(enteredValue);
   };
 
   return (
