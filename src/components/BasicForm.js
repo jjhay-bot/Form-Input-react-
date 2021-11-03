@@ -1,6 +1,7 @@
 import useInput from '../hooks/use-input';
 
-const isNotEmpty = (value) => value.trim() !== ''
+const isNotEmpty = (value) => value.trim() !== '';
+const isEmail = (value) => value.includes('@');
 
 const BasicForm = (props) => {
   const {
@@ -11,7 +12,6 @@ const BasicForm = (props) => {
     inputBlurHandler: firstNameBlurHandler,
     reset: resetFirstName,
   } = useInput(isNotEmpty);
-
   const {
     value: lastNameValue,
     isValid: lastNameIsValid,
@@ -20,30 +20,29 @@ const BasicForm = (props) => {
     inputBlurHandler: lastNameBlurHandler,
     reset: resetLastName,
   } = useInput(isNotEmpty);
-
   const {
     value: emailValue,
     isValid: emailIsValid,
     hasError: emailHasError,
-    valueChangeHandler: emailChangedHandler,
+    valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
     reset: resetEmail,
-  } = useInput(isNotEmpty);
+  } = useInput(isEmail);
 
-  let formIsValid = false; 
+  let formIsValid = false;
 
   if (firstNameIsValid && lastNameIsValid && emailIsValid) {
     formIsValid = true;
   }
 
-  const SubmitHandler = (event) => {
+  const submitHandler = event => {
     event.preventDefault();
 
     if (!formIsValid) {
       return;
     }
 
-    console.log('Submitted');
+    console.log('Submitted!');
     console.log(firstNameValue, lastNameValue, emailValue);
 
     resetFirstName();
@@ -51,54 +50,49 @@ const BasicForm = (props) => {
     resetEmail();
   };
 
-  const firstNameClasses = firstNameValue ? 'form-control invalid' : 'form-control';
-  const lastNametClasses = lastNameValue ? 'form-control invalid' : 'form-control';
-  const emailClasses = emailValue ? 'form-control invalid' : 'form-control';
+  const firstNameClasses = firstNameHasError ? 'form-control invalid' : 'form-control';
+  const lastNameClasses = lastNameHasError ? 'form-control invalid' : 'form-control';
+  const emailClasses = emailHasError ? 'form-control invalid' : 'form-control';
 
   return (
-    <form onSubmit={SubmitHandler}>
-      <div >
+    <form onSubmit={submitHandler}>
+      <div className='control-group'>
         <div className={firstNameClasses}>
           <label htmlFor='name'>First Name</label>
-          <input 
+          <input
             type='text'
             id='name'
+            value={firstNameValue}
             onChange={firstNameChangeHandler}
             onBlur={firstNameBlurHandler}
-            value={firstNameValue}
           />
-          {firstNameHasError && <p className='error-text'>Please enter a first name.</p>}
+          {firstNameHasError && <p className="error-text">Please enter a first name.</p>}
         </div>
-
-        <div className={lastNametClasses}>
+        <div className={lastNameClasses}>
           <label htmlFor='name'>Last Name</label>
-          <input 
+          <input
             type='text'
             id='name'
+            value={lastNameValue}
             onChange={lastNameChangeHandler}
             onBlur={lastNameBlurHandler}
-            value={lastNameValue}
           />
-          {lastNameHasError && <p className='error-text'>Please enter a last name.</p>}
-
+          {lastNameHasError && <p className="error-text">Please enter a last name.</p>}
         </div>
       </div>
-
       <div className={emailClasses}>
         <label htmlFor='name'>E-Mail Address</label>
-        <input 
-            type='text'
-            id='name'
-            onChange={emailChangedHandler}
-            onBlur={emailBlurHandler}
-            value={emailValue}
-          />
-          {emailHasError && <p className='error-text'>Please enter valid email.</p>}
-
+        <input
+          type='text'
+          id='name'
+          value={emailValue}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
+        />
+        {emailHasError && <p className="error-text">Please enter a valid email address.</p>}
       </div>
-
       <div className='form-actions'>
-        <button disabled={!formIsValid} >Submit</button>
+        <button disabled={!formIsValid}>Submit</button>
       </div>
     </form>
   );
