@@ -1,0 +1,8 @@
+  const {
+    value: enteredFirstName,
+    isValid: enteredFirstNameIsValid,
+    hasError: firstNameInputHasError,
+    valueChangeHandler: firstNameChangedHandler,
+    inputBlurHandler: firstNameBlurHandler,
+    reset: resetFirstNameInput,
+  } = useInput(isNotEmpty);
